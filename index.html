@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Mening Kafem</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header" id="header">
+  <div class="header-top">
+    <div class="logo">
+      <div class="logo-img">🍽️</div>
+      <div>
+        <div class="logo-name">Mening Kafem</div>
+        <div class="logo-sub">Toshkent, Uzbekiston</div>
+      </div>
+    </div>
+    <div class="cart-btn" onclick="openCart()">
+      🛒 <span class="cart-count" id="cartCount">0</span>
+    </div>
+  </div>
+  <div class="search-box">
+    <input type="text" placeholder="🔍 Taom qidirish..." id="searchInput" oninput="filterProducts()">
+  </div>
+  <div class="categories" id="categories"></div>
+</div>
+
+<!-- MAIN -->
+<div class="main" id="main">
+  <div class="products-grid" id="productsGrid">
+    <div class="loading">Yuklanmoqda...</div>
+  </div>
+</div>
+
+<!-- CART MODAL -->
+<div class="overlay" id="overlay" onclick="closeCart()"></div>
+<div class="cart-modal" id="cartModal">
+  <div class="cart-header">
+    <h2>🛒 Savatcha</h2>
+    <button onclick="closeCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-footer" id="cartFooter"></div>
+</div>
+
+<!-- ORDER MODAL -->
+<div class="order-modal" id="orderModal">
+  <div class="order-header">
+    <button onclick="closeOrder()">←</button>
+    <h2>Buyurtma</h2>
+  </div>
+  <div class="order-form">
+    <input type="text" placeholder="Ismingiz" id="orderName">
+    <input type="tel" placeholder="Telefon: +998901234567" id="orderPhone">
+    <input type="text" placeholder="Manzil (ixtiyoriy)" id="orderAddress">
+    <div class="order-summary" id="orderSummary"></div>
+    <button class="order-btn" onclick="submitOrder()">Buyurtma berish</button>
+  </div>
+</div>
+
+<!-- SUCCESS -->
+<div class="success-modal" id="successModal">
+  <div class="success-content">
+    <div class="success-icon">✅</div>
+    <h2>Buyurtma qabul qilindi!</h2>
+    <p>Tez orada siz bilan bog'lanamiz</p>
+    <button onclick="closeSuccess()">Davom etish</button>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
