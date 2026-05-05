@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><title>Setup</title>
+<style>
+body{font-family:sans-serif;padding:20px;max-width:400px;margin:0 auto}
+input{width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:8px;font-size:1rem}
+button{width:100%;padding:14px;background:#ff6b35;color:#fff;border:none;border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer}
+p{margin-top:12px;padding:10px;border-radius:8px}
+</style></head>
+<body>
+<h2>Admin yaratish</h2>
+<input id="username" placeholder="Username">
+<input id="password" type="password" placeholder="Parol">
+<input id="secret" placeholder="Setup Secret key">
+<button onclick="setup()">Yaratish</button>
+<p id="msg"></p>
+<script>
+async function setup(){
+  const r = await fetch('https://claude-production-8714.up.railway.app/api/auth/setup',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      username:document.getElementById('username').value,
+      password:document.getElementById('password').value,
+      secretKey:document.getElementById('secret').value
+    })
+  });
+  const d = await r.json();
+  document.getElementById('msg').textContent = JSON.stringify(d);
+}
+</script>
+</body>
+</html>
