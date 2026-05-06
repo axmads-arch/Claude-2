@@ -16,21 +16,10 @@ p{margin-top:12px;padding:10px;border-radius:8px}
 <p id="msg"></p>
 <script>
 async function setup(){
-  const r = await fetch('https://claude-production-0b03.up.railway.app
-/api/auth/setup',{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({
-      username:document.getElementById('username').value,
-      password:document.getElementById('password').value,
-      secretKey:document.getElementById('secret').value
-    })
-  });
+  const r = await fetch('https://claude-production-0b03.up.railway.app/api/auth/setup',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:document.getElementById('username').value,password:document.getElementById('password').value,secretKey:document.getElementById('secret').value})});
   const d = await r.json();
   document.getElementById('msg').textContent = JSON.stringify(d);
 }
 </script>
 </body>
 </html>
-
-
