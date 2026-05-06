@@ -12,8 +12,7 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);max-
 .header{background:#fff;padding:14px 16px 0;position:sticky;top:0;z-index:40;box-shadow:0 2px 12px rgba(0,0,0,0.06)}
 .header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
 .logo{display:flex;align-items:center;gap:10px}
-.logo-img{width:46px;height:46px;background:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;overflow:hidden}
-.logo-img img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.logo-img{width:46px;height:46px;background:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.4rem}
 .logo-name{font-weight:900;font-size:1rem;color:var(--text)}
 .logo-sub{font-size:0.72rem;color:var(--primary);font-weight:600}
 .cart-btn{background:var(--primary);border:none;padding:10px 18px;border-radius:24px;display:flex;align-items:center;gap:8px;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.9rem;color:#fff}
@@ -29,4 +28,94 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);max-
 .main{padding:16px}
 .banner{background:linear-gradient(135deg,var(--primary),var(--accent));border-radius:20px;padding:20px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;overflow:hidden;position:relative}
 .banner::before{content:'';position:absolute;right:-20px;top:-20px;width:100px;height:100px;background:rgba(255,255,255,0.1);border-radius:50%}
-.banner-text​​​​​​​​​​​​​​​​
+.banner-text{color:#fff;z-index:1}
+.banner-text h2{font-size:1.2rem;font-weight:900;margin-bottom:4px}
+.banner-text p{font-size:0.82rem;opacity:0.9}
+.banner-emoji{font-size:3rem;z-index:1}
+.section-title{font-size:1rem;font-weight:900;margin-bottom:14px;color:var(--text)}
+.products-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+.product-card{background:#fff;border-radius:var(--radius);overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06);transition:transform 0.2s}
+.product-card:active{transform:scale(0.97)}
+.product-img{height:130px;background:var(--light);display:flex;align-items:center;justify-content:center;font-size:2.5rem;overflow:hidden}
+.product-img img{width:100%;height:100%;object-fit:cover}
+.product-info{padding:10px}
+.product-name{font-weight:800;font-size:0.88rem;margin-bottom:3px;color:var(--text)}
+.product-desc{font-size:0.75rem;color:var(--muted);margin-bottom:8px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.product-footer{display:flex;justify-content:space-between;align-items:center}
+.product-price{font-weight:900;font-size:0.88rem;color:var(--primary)}
+.add-btn{background:var(--primary);color:#fff;border:none;width:28px;height:28px;border-radius:50%;font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif}
+.cart-sum{font-size:0.78rem;color:#fff;opacity:0.9}
+
+/* CART MODAL */
+.cart-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:100;display:none;align-items:flex-end}
+.cart-overlay.open{display:flex}
+.cart-modal{background:#fff;width:100%;max-width:480px;margin:0 auto;border-radius:24px 24px 0 0;padding:20px;max-height:80vh;overflow-y:auto}
+.cart-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.cart-header h3{font-size:1.1rem;font-weight:900}
+.close-btn{background:#f5f5f5;border:none;width:34px;height:34px;border-radius:50%;font-size:1.2rem;cursor:pointer}
+.cart-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
+.cart-item-name{flex:1;font-weight:700;font-size:0.88rem}
+.cart-item-price{font-weight:800;color:var(--primary);font-size:0.85rem}
+.qty-btn{background:var(--light);border:none;width:28px;height:28px;border-radius:50%;font-size:1rem;cursor:pointer;font-weight:900;color:var(--primary)}
+.qty-num{font-weight:800;font-size:0.9rem;min-width:20px;text-align:center}
+.cart-total{display:flex;justify-content:space-between;align-items:center;padding:16px 0;font-weight:900;font-size:1rem}
+.order-btn{width:100%;background:var(--primary);color:#fff;border:none;padding:16px;border-radius:14px;font-family:'Nunito',sans-serif;font-weight:900;font-size:1rem;cursor:pointer}
+.empty-cart{text-align:center;padding:30px;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <div class="logo">
+      <div class="logo-img">🍰</div>
+      <div>
+        <div class="logo-name">Rahmat Chef</div>
+        <div class="logo-sub">Sweet Pastry</div>
+      </div>
+    </div>
+    <button class="cart-btn" onclick="openCart()">
+      🛒 <span id="cartCount" class="cart-count">0</span>
+      <span id="cartSum" class="cart-sum"></span>
+    </button>
+  </div>
+  <div class="search-wrap">
+    <span>🔍</span>
+    <input type="text" placeholder="Mahsulot qidiring..." oninput="searchProducts(this.value)">
+  </div>
+  <div class="categories" id="categories"></div>
+</div>
+
+<div class="main">
+  <div class="banner">
+    <div class="banner-text">
+      <h2>Yangi mahsulotlar! 🎉</h2>
+      <p>Har kuni yangi va mazali taomlar</p>
+    </div>
+    <div class="banner-emoji">🍩</div>
+  </div>
+  <div class="section-title">Mahsulotlar</div>
+  <div class="products-grid" id="productsGrid">
+    <div style="grid-column:1/-1;text-align:center;padding:40px;color:#888">Yuklanmoqda...</div>
+  </div>
+</div>
+
+<!-- CART MODAL -->
+<div class="cart-overlay" id="cartOverlay" onclick="closeCartOutside(event)">
+  <div class="cart-modal">
+    <div class="cart-header">
+      <h3>🛒 Savat</h3>
+      <button class="close-btn" onclick="closeCart()">✕</button>
+    </div>
+    <div id="cartItems"></div>
+    <div class="cart-total">
+      <span>Jami:</span>
+      <span id="cartTotal">0 so'm</span>
+    </div>
+    <button class="order-btn" onclick="sendOrder()">📱 Buyurtma berish</button>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
