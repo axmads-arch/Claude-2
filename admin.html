@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin Panel</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,sans-serif;background:#f5f5f5;max-width:480px;margin:0 auto}
+.header{background:#ff6b35;padding:16px;color:#fff;display:flex;justify-content:space-between;align-items:center}
+.header h1{font-size:1.1rem;font-weight:800}
+.logout{background:rgba(255,255,255,0.2);border:none;color:#fff;padding:8px 14px;border-radius:8px;cursor:pointer;font-size:0.85rem}
+.tabs{display:flex;background:#fff;border-bottom:2px solid #f0f0f0}
+.tab{flex:1;padding:14px;text-align:center;border:none;background:none;font-size:0.88rem;font-weight:700;color:#999;cursor:pointer}
+.tab.active{color:#ff6b35;border-bottom:2px solid #ff6b35}
+.content{padding:16px}
+.card{background:#fff;border-radius:16px;padding:16px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.card h3{font-size:0.95rem;margin-bottom:12px;color:#1a1a1a}
+input,select,textarea{width:100%;padding:10px 14px;border:1.5px solid #eee;border-radius:10px;font-size:0.88rem;margin-bottom:10px;outline:none;font-family:inherit}
+input:focus,select:focus{border-color:#ff6b35}
+.btn{width:100%;padding:13px;background:#ff6b35;color:#fff;border:none;border-radius:12px;font-size:0.95rem;font-weight:700;cursor:pointer}
+.btn-red{background:#ef4444}
+.btn-green{background:#22c55e}
+.product-item{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid #f0f0f0}
+.product-item:last-child{border-bottom:none}
+.product-name{font-weight:700;font-size:0.88rem}
+.product-price{color:#ff6b35;font-size:0.85rem;font-weight:700}
+.product-cat{color:#999;font-size:0.78rem}
+.item-btns{display:flex;gap:6px}
+.item-btn{padding:6px 12px;border:none;border-radius:8px;font-size:0.78rem;font-weight:700;cursor:pointer}
+.del-btn{background:#fee2e2;color:#ef4444}
+.order-item{padding:12px 0;border-bottom:1px solid #f0f0f0}
+.order-item:last-child{border-bottom:none}
+.order-top{display:flex;justify-content:space-between;margin-bottom:4px}
+.order-name{font-weight:700;font-size:0.88rem}
+.order-status{padding:4px 10px;border-radius:20px;font-size:0.75rem;font-weight:700}
+.status-yangi{background:#fef3c7;color:#d97706}
+.status-tayyor{background:#d1fae5;color:#059669}
+.status-yetkazildi{background:#dbeafe;color:#2563eb}
+.order-phone{color:#999;font-size:0.82rem}
+.order-total{color:#ff6b35;font-weight:800;font-size:0.88rem}
+select.status-select{margin:8px 0 0;padding:6px;font-size:0.82rem;width:auto}
+.login-box{padding:32px 16px}
+.login-box h2{text-align:center;margin-bottom:24px;color:#1a1a1a}
+.msg{text-align:center;padding:10px;border-radius:8px;margin-bottom:12px;font-size:0.85rem}
+.msg.error{background:#fee2e2;color:#ef4444}
+.msg.success{background:#d1fae5;color:#059669}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.stat{background:#fff;border-radius:14px;padding:16px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.stat-num{font-size:1.8rem;font-weight:900;color:#ff6b35}
+.stat-label{font-size:0.78rem;color:#999;margin-top:4px}
+</style>
+</head>
+<body>
+
+<div id="loginPage">
+  <div class="header"><h1>🔐 Admin Panel</h1></div>
+  <div class="login-box">
+    <h2>Kirish</h2>
+    <div id="loginMsg"></div>
+    <input id="loginUser" placeholder="Username">
+    <input id="loginPass" type="password" placeholder="Parol">
+    <button class="btn" onclick="login()">Kirish</button>
+  </div>
+</div>
+
+<div id="adminPage" style="display:none">
+  <div class="header">
+    <h1>⚙️ Admin Panel</h1>
+    <button class="logout" onclick="logout()">Chiqish</button>
+  </div>
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('products')">Mahsulotlar</button>
+    <button class="tab" onclick="showTab('add')">Qo'shish</button>
+    <button class="tab" onclick="showTab('orders')">Buyurtmalar</button>
+  </div>
+
+  <div id="tab-products" class="content">
+    <div class="stats">
+      <div class="stat"><div class="stat-num" id="statProducts">0</div><div class="stat-label">Mahsulotlar</div></div>
+      <div class="stat"><div class="stat-num" id="statOrders">0</div><div class="stat-label">Buyurtmalar</div></div>
+    </div>
+    <div class="card">
+      <h3>📦 Barcha mahsulotlar</h3>
+      <div id="productsList"></div>
+    </div>
+  </div>
+
+  <div id="tab-add" class="content" style="display:none">
+    <div class="card">
+      <h3>➕ Yangi mahsulot</h3>
+      <input id="pName" placeholder="Mahsulot nomi">
+      <input id="pDesc" placeholder="Tavsif (ixtiyoriy)">
+      <input id="pPrice" type="number" placeholder="Narx (so'm)">
+      <input id="pImage" placeholder="Rasm URL (ixtiyoriy)">
+      <input id="pCategory" placeholder="Kategoriya (masalan: lavash, pizza)">
+      <button class="btn" onclick="addProduct()">➕ Qo'shish</button>
+      <div id="addMsg" style="margin-top:10px;text-align:center;font-size:0.85rem"></div>
+    </div>
+  </div>
+
+  <div id="tab-orders" class="content" style="display:none">
+    <div class="card">
+      <h3>📋 Buyurtmalar</h3>
+      <div id="ordersList"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const API = 'https://claude-production-0b03.up.railway.app';
+let token = localStorage.getItem('adminToken');
+
+if(token) showAdmin();
+
+async function login(){
+  const username = document.getElementById('loginUser').value;
+  const password = document.getElementById('loginPass').value;
+  try {
+    const r = await fetch(`${API}/api/auth/login`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username,password})});
+    const d = await r.json();
+    if(d.token){
+      token = d.token;
+      localStorage.setItem('adminToken',token);
+      showAdmin();
+    } else {
+      document.getElementById('loginMsg').innerHTML = `<div class="msg error">${d.error}</div>`;
+    }
+  } catch(e){ document.getElementById('loginMsg').innerHTML = '<div class="msg error">Xatolik!</div>'; }
+}
+
+function logout(){
+  localStorage.removeItem('adminToken');
+  token = null;
+  document.getElementById('loginPage').style.display='block';
+  document.getElementById('adminPage').style.display='none';
+}
+
+function showAdmin(){
+  document.getElementById('loginPage').style.display='none';
+  document.getElementById('adminPage').style.display='block';
+  loadProducts();
+  loadOrders();
+}
+
+function showTab(tab){
+  document.querySelectorAll('.content').forEach(c=>c.style.display='none');
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(`tab-${tab}`).style.display='block';
+  event.target.classList.add('active');
+}
+
+async function loadProducts(){
+  const r = await fetch(`${API}/api/products`);
+  const products = await r.json();
+  document.getElementById('statProducts').textContent = products.length;
+  document.getElementById('productsList').innerHTML = products.length ? products.map(p=>`
+    <div class="product-item">
+      <div>
+        <div class="product-name">${p.name}</div>
+        <div class="product-cat">${p.category}</div>
+        <div class="product-price">${Number(p.price).toLocaleString()} so'm</div>
+      </div>
+      <div class="item-btns">
+        <button class="item-btn del-btn" onclick="deleteProduct(${p.id})">O'chir</button>
+      </div>
+    </div>
+  `).join('') : '<p style="color:#999;text-align:center;padding:20px">Mahsulot yo\'q</p>';
+}
+
+async function addProduct(){
+  const name = document.getElementById('pName').value.trim();
+  const price = document.getElementById('pPrice').value;
+  const category = document.getElementById('pCategory').value.trim();
+  if(!name||!price||!category){document.getElementById('addMsg').innerHTML='<span style="color:red">Majburiy maydonlarni to\'ldiring!</span>';return;}
+  try{
+    const r = await fetch(`${API}/api/products`,{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${token}`},body:JSON.stringify({name,description:document.getElementById('pDesc').value,price:Number(price),image:document.getElementById('pImage').value,category})});
+    const d = await r.json();
+    if(d.id){
+      document.getElementById('addMsg').innerHTML='<span style="color:green">✅ Qo\'shildi!</span>';
+      document.getElementById('pName').value='';
+      document.getElementById('pDesc').value='';
+      document.getElementById('pPrice').value='';
+      document.getElementById('pImage').value='';
+      document.getElementById('pCategory').value='';
+      loadProducts();
+    }
+  }catch(e){document.getElementById('addMsg').innerHTML='<span style="color:red">Xatolik!</span>';}
+}
+
+async function deleteProduct(id){
+  if(!confirm('O\'chirishni tasdiqlaysizmi?'))return;
+  await fetch(`${API}/api/products/${id}`,{method:'DELETE',headers:{'Authorization':`Bearer ${token}`}});
+  loadProducts();
+}
+
+async function loadOrders(){
+  try{
+    const r = await fetch(`${API}/api/orders`,{headers:{'Authorization':`Bearer ${token}`}});
+    const orders = await r.json();
+    document.getElementById('statOrders').textContent = orders.length;
+    document.getElementById('ordersList').innerHTML = orders.length ? orders.map(o=>`
+      <div class="order-item">
+        <div class="order-top">
+          <span class="order-name">${o.customerName}</span>
+          <span class="order-status status-${o.status}">${o.status}</span>
+        </div>
+        <div class="order-phone">📞 ${o.phone}</div>
+        ${o.address?`<div class="order-phone">📍 ${o.address}</div>`:''}
+        <div class="order-total">${Number(o.total).toLocaleString()} so'm</div>
+        <select class="status-select" onchange="updateStatus(${o.id},this.value)">
+          <option ${o.status==='yangi'?'selected':''}>yangi</option>
+          <option ${o.status==='tayyorlanmoqda'?'selected':''}>tayyorlanmoqda</option>
+          <option ${o.status==='tayyor'?'selected':''}>tayyor</option>
+          <option ${o.status==='yetkazilmoqda'?'selected':''}>yetkazilmoqda</option>
+          <option ${o.status==='yetkazildi'?'selected':''}>yetkazildi</option>
+        </select>
+      </div>
+    `).join('') : '<p style="color:#999;text-align:center;padding:20px">Buyurtma yo\'q</p>';
+  }catch(e){}
+}
+
+async function updateStatus(id,status){
+  await fetch(`${API}/api/orders/${id}/status`,{method:'PUT',headers:{'Content-Type':'application/json','Authorization':`Bearer ${token}`},body:JSON.stringify({status})});
+  loadOrders();
+}
+</script>
+</body>
+</html>
