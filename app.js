@@ -32,13 +32,13 @@ function filterCategory(cat) {
 function renderProducts(list) {
   const grid = document.getElementById('productsGrid');
   if (!list.length) {
-    grid.innerHTML = '<div style="padding:40px;text-align:center;color:#888">Mahsulot topilmadi</div>';
+    grid.innerHTML = '<div style="grid-column:1/-1;padding:40px;text-align:center;color:#888">Mahsulot topilmadi</div>';
     return;
   }
   grid.innerHTML = list.map(p => `
     <div class="product-card">
-      <div class="product-img" style="background:#e8f5f1;display:flex;align-items:center;justify-content:center;font-size:2rem">
-        ${p.image ? `<img src="${p.image}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover">` : '🍰'}
+      <div class="product-img">
+        ${p.image ? `<img src="${p.image}" alt="${p.name}">` : '🍰'}
       </div>
       <div class="product-info">
         <div class="product-name">${p.name}</div>
@@ -64,11 +64,120 @@ function addToCart(id) {
   updateCartBtn();
 }
 
+function removeFromCart(id) {
+  const existing = cart.find(c => c.id === id);
+  if (!existing) return;
+  if (existing.qty > 1) {
+    existing.qty--;
+  } else {
+    cart = cart.filter(c => c.id !== id);
+  }
+  updateCartBtn();
+  renderCartItems();
+}
+
 function updateCartBtn() {
   const total = cart.reduce((s, c) => s + c.qty, 0);
   const sum = cart.reduce((s, c) => s + c.qty * c.price, 0);
   document.getElementById('cartCount').textContent = total;
   document.getElementById('cartSum').textContent = total > 0 ? Number(sum).toLocaleString() + " so'm" : '';
+}
+
+function renderCartItems() {
+  const container = document.getElementById('cartItems');
+  const total = cart.reduce((s, c) => s + c.qty * c.price, 0);
+  document.getElementById('cartTotal').textContent = Number(total).toLocaleString() + " so'm";
+
+  if (!cart.length) {
+    container.innerHTML = '<div class="empty-cart">🛒 Savat bo\'sh</div>';
+    return;
+  }
+  container.innerHTML = cart.map(c => `
+    <div class="cart-item">
+      <div class="cart-item-name">${c.name}</div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <button class="qty-btn" onclick="removeFromCart(${c.id})">−</button>
+        <span class="qty-num">${c.qty}</span>
+        <button class="qty-btn" onclick="addToCart(${c.id})">+</button>
+      </div>
+      <div class="cart-item-price">${Number(c.qty * c.price).toLocaleString()} so'm</div>
+    </div>
+  `).join('');
+}
+
+function openCart() {
+  renderCartItems();
+  document.getElementById('cartOverlay').classList.add('open');
+}
+
+function closeCart() {
+  document.getElementById('cartOverlay').classList.remove('open');
+}
+
+function closeCartOutside(e) {
+  if (e.target === document.getElementById('cartOverlay')) closeCart();
+}
+
+function openOrderForm() {
+  closeCart();
+  document.getElementById('orderOverlay').classList.add('open');
+}
+
+function closeOrderForm() {
+  document.getElementById('orderOverlay').classList.remove('open');
+}
+
+function closeOrderOutside(e) {
+  if (e.target === document.getElementById('orderOverlay')) closeOrderForm();
+}
+
+async function sendOrder() {
+  if (!cart.length) return alert('Savat bo\'sh!');
+  openOrderForm();
+}
+
+async function submitOrder() {
+  const name = document.getElementById('orderName').value.trim();
+  const phone = document.getElementById('orderPhone').value.trim();
+  const address = document.getElementById('orderAddress').value.trim();
+
+  if (!name || !phone || !address) return alert('Barcha maydonlarni to\'ldiring!');
+
+  const btn = document.getElementById('submitBtn');
+  btn.textContent = 'Yuborilmoqda...';
+  btn.disabled = true;
+
+  try {
+    const res = await fetch(`${API}/api/orders`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        customerName: name,
+        phone,
+        address,
+        items: cart.map(c => ({ productId: c.id, quantity: c.qty, price: c.price }))
+      })
+    });
+
+    if (!res.ok) throw new Error('Server xatoligi');
+
+    cart = [];
+    updateCartBtn();
+    closeOrderForm();
+    showSuccess();
+  } catch(e) {
+    alert('Xatolik: ' + e.message);
+  } finally {
+    btn.textContent = '✅ Buyurtma berish';
+    btn.disabled = false;
+  }
+}
+
+function showSuccess() {
+  document.getElementById('successOverlay').classList.add('open');
+  setTimeout(() => {
+    document.getElementById('successOverlay').classList.remove('open');
+  }, 3000);
 }
 
 function searchProducts(query) {
