@@ -10,14 +10,14 @@ body{font-family:-apple-system,sans-serif;background:#f5f5f5;max-width:480px;mar
 .header{background:#1a6b5a;padding:16px;color:#fff;display:flex;justify-content:space-between;align-items:center}
 .header h1{font-size:1.1rem;font-weight:800}
 .logout{background:rgba(255,255,255,0.2);border:none;color:#fff;padding:8px 14px;border-radius:8px;cursor:pointer;font-size:0.85rem}
-.tabs{display:flex;background:#fff;border-bottom:2px solid #f0f0f0}
-.tab{flex:1;padding:14px;text-align:center;border:none;background:none;font-size:0.88rem;font-weight:700;color:#999;cursor:pointer}
+.tabs{display:flex;background:#fff;border-bottom:2px solid #f0f0f0;overflow-x:auto}
+.tab{flex-shrink:0;padding:12px 14px;text-align:center;border:none;background:none;font-size:0.82rem;font-weight:700;color:#999;cursor:pointer;white-space:nowrap}
 .tab.active{color:#1a6b5a;border-bottom:2px solid #1a6b5a}
 .content{padding:16px}
 .card{background:#fff;border-radius:16px;padding:16px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
 .card h3{font-size:0.95rem;margin-bottom:12px;color:#1a1a1a}
 input,select,textarea{width:100%;padding:10px 14px;border:1.5px solid #eee;border-radius:10px;font-size:0.88rem;margin-bottom:10px;outline:none;font-family:inherit}
-input:focus,select:focus{border-color:#1a6b5a}
+input:focus,select:focus,textarea:focus{border-color:#1a6b5a}
 .btn{width:100%;padding:13px;background:#1a6b5a;color:#fff;border:none;border-radius:12px;font-size:0.95rem;font-weight:700;cursor:pointer}
 .product-item{padding:12px 0;border-bottom:1px solid #f0f0f0}
 .product-item:last-child{border-bottom:none}
@@ -30,12 +30,10 @@ input:focus,select:focus{border-color:#1a6b5a}
 .del-btn{background:#fee2e2;color:#ef4444}
 .edit-btn{background:#e8f5f1;color:#1a6b5a}
 .order-item{padding:12px 0;border-bottom:1px solid #f0f0f0}
+.order-item:last-child{border-bottom:none}
 .order-top{display:flex;justify-content:space-between;margin-bottom:4px}
 .order-name{font-weight:700;font-size:0.88rem}
-.order-status{padding:4px 10px;border-radius:20px;font-size:0.75rem;font-weight:700}
-.status-yangi{background:#fef3c7;color:#d97706}
-.status-tayyor{background:#d1fae5;color:#059669}
-.status-yetkazildi{background:#dbeafe;color:#2563eb}
+.order-status{padding:4px 10px;border-radius:20px;font-size:0.75rem;font-weight:700;background:#fef3c7;color:#d97706}
 .order-phone{color:#999;font-size:0.82rem}
 .order-total{color:#1a6b5a;font-weight:800;font-size:0.88rem}
 select.status-select{margin:8px 0 0;padding:6px;font-size:0.82rem;width:auto}
@@ -50,6 +48,11 @@ select.status-select{margin:8px 0 0;padding:6px;font-size:0.82rem;width:auto}
 .edit-form{background:#f0faf6;border-radius:12px;padding:12px;margin-top:8px;display:none}
 .edit-form input{margin-bottom:8px}
 .save-btn{background:#1a6b5a;color:#fff;border:none;padding:8px 16px;border-radius:8px;font-size:0.82rem;font-weight:700;cursor:pointer;width:100%}
+.banner-preview{background:linear-gradient(135deg,#1a6b5a,#2d9b7f);border-radius:16px;padding:20px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center}
+.banner-preview-text{color:#fff}
+.banner-preview-text h3{font-size:1rem;font-weight:900;margin-bottom:4px}
+.banner-preview-text p{font-size:0.8rem;opacity:0.9}
+.banner-preview-emoji{font-size:2.5rem}
 </style>
 </head>
 <body>
@@ -73,6 +76,7 @@ select.status-select{margin:8px 0 0;padding:6px;font-size:0.82rem;width:auto}
   <div class="tabs">
     <button class="tab active" onclick="showTab('products', this)">Mahsulotlar</button>
     <button class="tab" onclick="showTab('add', this)">Qo'shish</button>
+    <button class="tab" onclick="showTab('banner', this)">Banner</button>
     <button class="tab" onclick="showTab('orders', this)">Buyurtmalar</button>
   </div>
 
@@ -97,6 +101,24 @@ select.status-select{margin:8px 0 0;padding:6px;font-size:0.82rem;width:auto}
       <input id="pCategory" placeholder="Kategoriya">
       <button class="btn" onclick="addProduct()">➕ Qo'shish</button>
       <div id="addMsg" style="margin-top:10px;text-align:center;font-size:0.85rem"></div>
+    </div>
+  </div>
+
+  <div id="tab-banner" class="content" style="display:none">
+    <div class="card">
+      <h3>🎨 Banner boshqaruvi</h3>
+      <div class="banner-preview">
+        <div class="banner-preview-text">
+          <h3 id="previewTitle">Yangi mahsulotlar! 🎉</h3>
+          <p id="previewSubtitle">Har kuni yangi va mazali taomlar</p>
+        </div>
+        <div class="banner-preview-emoji" id="previewEmoji">🍩</div>
+      </div>
+      <input id="bannerTitle" placeholder="Banner sarlavhasi">
+      <input id="bannerSubtitle" placeholder="Banner tavsifi">
+      <input id="bannerEmoji" placeholder="Emoji (masalan: 🍩)">
+      <button class="btn" onclick="saveBanner()">💾 Saqlash</button>
+      <div id="bannerMsg" style="margin-top:10px;text-align:center;font-size:0.85rem"></div>
     </div>
   </div>
 
@@ -141,6 +163,7 @@ function showAdmin(){
   document.getElementById('adminPage').style.display='block';
   loadProducts();
   loadOrders();
+  loadBanner();
 }
 
 function showTab(tab, el){
@@ -148,6 +171,36 @@ function showTab(tab, el){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.getElementById(`tab-${tab}`).style.display='block';
   el.classList.add('active');
+}
+
+async function loadBanner(){
+  try {
+    const r = await fetch(`${API}/api/banner`);
+    const d = await r.json();
+    document.getElementById('bannerTitle').value = d.title;
+    document.getElementById('bannerSubtitle').value = d.subtitle;
+    document.getElementById('bannerEmoji').value = d.emoji;
+    document.getElementById('previewTitle').textContent = d.title;
+    document.getElementById('previewSubtitle').textContent = d.subtitle;
+    document.getElementById('previewEmoji').textContent = d.emoji;
+  } catch(e){}
+}
+
+async function saveBanner(){
+  const title = document.getElementById('bannerTitle').value;
+  const subtitle = document.getElementById('bannerSubtitle').value;
+  const emoji = document.getElementById('bannerEmoji').value;
+  try {
+    const r = await fetch(`${API}/api/banner`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({title,subtitle,emoji})});
+    const d = await r.json();
+    document.getElementById('previewTitle').textContent = d.title;
+    document.getElementById('previewSubtitle').textContent = d.subtitle;
+    document.getElementById('previewEmoji').textContent = d.emoji;
+    document.getElementById('bannerMsg').innerHTML = '<span style="color:green">✅ Saqlandi!</span>';
+    setTimeout(()=>document.getElementById('bannerMsg').innerHTML='', 2000);
+  } catch(e){
+    document.getElementById('bannerMsg').innerHTML = '<span style="color:red">Xatolik!</span>';
+  }
 }
 
 async function loadProducts(){
@@ -229,7 +282,7 @@ async function loadOrders(){
       <div class="order-item">
         <div class="order-top">
           <span class="order-name">${o.customerName}</span>
-          <span class="order-status status-yangi">${o.status}</span>
+          <span class="order-status">${o.status}</span>
         </div>
         <div class="order-phone">📞 ${o.phone}</div>
         ${o.address?`<div class="order-phone">📍 ${o.address}</div>`:''}
