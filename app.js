@@ -3,6 +3,16 @@ let cart = [];
 let products = [];
 let activeCategory = 'hammasi';
 
+async function loadBanner() {
+  try {
+    const r = await fetch(`${API}/api/banner`);
+    const d = await r.json();
+    document.getElementById('bannerTitle').textContent = d.title;
+    document.getElementById('bannerSubtitle').textContent = d.subtitle;
+    document.getElementById('bannerEmoji').textContent = d.emoji;
+  } catch(e) {}
+}
+
 async function loadProducts() {
   try {
     const res = await fetch(`${API}/api/products`);
@@ -11,7 +21,7 @@ async function loadProducts() {
     renderCategories();
     renderProducts(products);
   } catch(e) {
-    document.getElementById('productsGrid').innerHTML = '<div style="padding:20px;text-align:center;color:red">❌ ' + e.message + '</div>';
+    document.getElementById('productsGrid').innerHTML = '<div style="grid-column:1/-1;padding:20px;text-align:center;color:red">❌ ' + e.message + '</div>';
   }
 }
 
@@ -87,7 +97,6 @@ function renderCartItems() {
   const container = document.getElementById('cartItems');
   const total = cart.reduce((s, c) => s + c.qty * c.price, 0);
   document.getElementById('cartTotal').textContent = Number(total).toLocaleString() + " so'm";
-
   if (!cart.length) {
     container.innerHTML = '<div class="empty-cart">🛒 Savat bo\'sh</div>';
     return;
@@ -140,27 +149,20 @@ async function submitOrder() {
   const name = document.getElementById('orderName').value.trim();
   const phone = document.getElementById('orderPhone').value.trim();
   const address = document.getElementById('orderAddress').value.trim();
-
   if (!name || !phone || !address) return alert('Barcha maydonlarni to\'ldiring!');
-
   const btn = document.getElementById('submitBtn');
   btn.textContent = 'Yuborilmoqda...';
   btn.disabled = true;
-
   try {
     const res = await fetch(`${API}/api/orders`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        customerName: name,
-        phone,
-        address,
+        customerName: name, phone, address,
         items: cart.map(c => ({ productId: c.id, quantity: c.qty, price: c.price }))
       })
     });
-
     if (!res.ok) throw new Error('Server xatoligi');
-
     cart = [];
     updateCartBtn();
     closeOrderForm();
@@ -189,4 +191,7 @@ function searchProducts(query) {
   renderProducts(filtered);
 }
 
-document.addEventListener('DOMContentLoaded', loadProducts);
+document.addEventListener('DOMContentLoaded', () => {
+  loadBanner();
+  loadProducts();
+});
