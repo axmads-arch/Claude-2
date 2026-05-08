@@ -1,6 +1,17 @@
 import React, { useState } from 'react';
 
-export default function Home({ products, banner, cart, addToCart, cartTotal, setPage, API }) {
+function SkeletonCard() {
+  return (
+    <div className="skeleton-card">
+      <div className="skeleton-img"></div>
+      <div className="skeleton-line"></div>
+      <div className="skeleton-line short"></div>
+      <div className="skeleton-line price"></div>
+    </div>
+  );
+}
+
+export default function Home({ products, banner, cart, addToCart, cartTotal, setPage, API, loading }) {
   const [search, setSearch] = useState('');
   const [activeCategory, setActiveCategory] = useState('hammasi');
 
@@ -64,7 +75,11 @@ export default function Home({ products, banner, cart, addToCart, cartTotal, set
 
         <div className="section-title">Mahsulotlar</div>
 
-        {filtered.length === 0 ? (
+        {loading ? (
+          <div className="products-grid">
+            {[1,2,3,4].map(i => <SkeletonCard key={i} />)}
+          </div>
+        ) : filtered.length === 0 ? (
           <div className="empty-state">
             <div className="icon">🍽️</div>
             <p>Mahsulot topilmadi</p>
