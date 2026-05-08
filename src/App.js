@@ -3,6 +3,7 @@ import Home from './pages/Home';
 import Cart from './pages/Cart';
 import Orders from './pages/Orders';
 import Profile from './pages/Profile';
+import ProductDetail from './pages/ProductDetail';
 import './App.css';
 
 const API = 'https://claude-production-0b03.up.railway.app';
@@ -12,6 +13,7 @@ export default function App() {
   const [cart, setCart] = useState([]);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedProduct, setSelectedProduct] = useState(null);
   const [banner, setBanner] = useState({
     title: 'Yangi mahsulotlar! 🎉',
     subtitle: 'Har kuni yangi va mazali taomlar',
@@ -60,6 +62,11 @@ export default function App() {
     });
   }
 
+  function openProduct(product) {
+    setSelectedProduct(product);
+    setPage('detail');
+  }
+
   const cartTotal = cart.reduce((s, c) => s + c.qty, 0);
 
   return (
@@ -72,8 +79,17 @@ export default function App() {
           addToCart={addToCart}
           cartTotal={cartTotal}
           setPage={setPage}
+          openProduct={openProduct}
           API={API}
           loading={loading}
+        />
+      )}
+      {page === 'detail' && (
+        <ProductDetail
+          product={selectedProduct}
+          setPage={setPage}
+          addToCart={addToCart}
+          cart={cart}
         />
       )}
       {page === 'cart' && (
