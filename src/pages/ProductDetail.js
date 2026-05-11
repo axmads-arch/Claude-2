@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 
 export default function ProductDetail({ product, setPage, addToCart, cart }) {
-  if (!product) return null;
+  const [qty, setQty] = useState(1);
 
-  const cartItem = cart.find(c => c.id === product.id);
-  const [qty, setQty] = useState(cartItem ? cartItem.qty : 1);
+  if (!product) return null;
 
   function handleAdd() {
     for (let i = 0; i < qty; i++) addToCart(product);
@@ -29,18 +28,20 @@ export default function ProductDetail({ product, setPage, addToCart, cart }) {
             <span style={{background:'#e8f5f1',color:'#1a6b5a',padding:'4px 12px',borderRadius:'20px',fontSize:'0.8rem',fontWeight:700,marginLeft:'10px'}}>{product.category}</span>
           </div>
 
-          <p style={{color:'#888',fontSize:'0.9rem',lineHeight:1.6,marginBottom:'20px'}}>{product.description || 'Tavsif yo\'q'}</p>
+          <p style={{color:'#888',fontSize:'0.9rem',lineHeight:1.6,marginBottom:'20px'}}>
+            {product.description || 'Tavsif yoq'}
+          </p>
 
           <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'16px',background:'#f8f8f8',borderRadius:'16px',marginBottom:'20px'}}>
             <div>
               <div style={{fontSize:'0.78rem',color:'#888',marginBottom:'4px'}}>Narx</div>
-              <div style={{fontSize:'1.4rem',fontWeight:900,color:'#1a6b5a'}}>{Number(product.price * qty).toLocaleString()} so'm</div>
+              <div style={{fontSize:'1.4rem',fontWeight:900,color:'#1a6b5a'}}>{Number(product.price * qty).toLocaleString()} som</div>
             </div>
             <div style={{display:'flex',alignItems:'center',gap:'12px'}}>
               <button
                 onClick={() => setQty(q => Math.max(1, q - 1))}
                 style={{background:'#e8f5f1',border:'none',width:'36px',height:'36px',borderRadius:'50%',fontSize:'1.2rem',fontWeight:900,color:'#1a6b5a',cursor:'pointer'}}
-              >−</button>
+              >-</button>
               <span style={{fontWeight:900,fontSize:'1.1rem',minWidth:'20px',textAlign:'center'}}>{qty}</span>
               <button
                 onClick={() => setQty(q => q + 1)}
@@ -50,7 +51,7 @@ export default function ProductDetail({ product, setPage, addToCart, cart }) {
           </div>
 
           <button className="order-btn" onClick={handleAdd}>
-            🛒 Savatga qo'shish — {Number(product.price * qty).toLocaleString()} so'm
+            Savatga qoshish — {Number(product.price * qty).toLocaleString()} som
           </button>
         </div>
       </div>
