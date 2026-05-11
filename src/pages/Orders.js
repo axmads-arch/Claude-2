@@ -12,32 +12,24 @@ export default function Orders({ setPage, API }) {
   async function loadOrders() {
     if (!phone) { setLoading(false); return; }
     try {
-      const res = await fetch(`${API}/api/orders/my/${phone}`);
+      const res = await fetch(API + '/api/orders/my/' + phone);
       const data = await res.json();
       if (Array.isArray(data)) setOrders(data);
     } catch(e) {}
     setLoading(false);
   }
 
-  const statusColor = {
-    yangi: '#d97706',
-    tayyorlanmoqda: '#2563eb',
-    tayyor: '#059669',
-    yetkazilmoqda: '#7c3aed',
-    yetkazildi: '#059669'
-  };
-
   if (!phone) {
     return (
       <div>
         <div className="page-header">
-          <h2>📋 Buyurtmalar</h2>
+          <h2>Buyurtmalar</h2>
         </div>
         <div className="empty-state">
-          <div className="icon">📋</div>
-          <p>Buyurtmalarni ko'rish uchun profilga kiring</p>
-          <button className="order-btn" style={{marginTop:'20px'}} onClick={() => setPage('profile')}>
-            👤 Profilga o'tish
+          <div className="empty-icon">📋</div>
+          <p className="empty-text">Buyurtmalarni ko'rish uchun profilga kiring</p>
+          <button className="btn-primary" onClick={() => setPage('profile')}>
+            Profilga o'tish
           </button>
         </div>
       </div>
@@ -47,33 +39,46 @@ export default function Orders({ setPage, API }) {
   return (
     <div>
       <div className="page-header">
-        <h2>📋 Buyurtmalar</h2>
+        <h2>Buyurtmalar</h2>
       </div>
       <div className="page">
         {loading ? (
           <div className="empty-state"><p>Yuklanmoqda...</p></div>
         ) : orders.length === 0 ? (
           <div className="empty-state">
-            <div className="icon">📋</div>
-            <p>Buyurtmalar yo'q</p>
+            <div className="empty-icon">📋</div>
+            <p className="empty-text">Buyurtmalar yo'q</p>
+            <button className="btn-primary" onClick={() => setPage('home')}>
+              Buyurtma berish
+            </button>
           </div>
         ) : (
           orders.map(o => (
-            <div key={o.id} style={{background:'#fff',borderRadius:'16px',padding:'16px',marginBottom:'12px',boxShadow:'0 2px 8px rgba(0,0,0,0.06)'}}>
-              <div style={{display:'flex',justifyContent:'space-between',marginBottom:'8px'}}>
-                <span style={{fontWeight:800}}>Buyurtma #{o.id}</span>
-                <span style={{background:'#f0faf6',color:statusColor[o.status]||'#888',padding:'4px 10px',borderRadius:'20px',fontSize:'0.78rem',fontWeight:700}}>
+            <div key={o.id} className="order-card">
+              <div className="order-card-header">
+                <span className="order-card-id">Buyurtma #{o.id}</span>
+                <span className={'order-status-badge status-' + o.status}>
                   {o.status}
                 </span>
               </div>
-              <div style={{fontSize:'0.82rem',color:'#888',marginBottom:'4px'}}>
-                📍 {o.address}
-              </div>
-              <div style={{fontWeight:900,color:'#1a6b5a',fontSize:'0.95rem'}}>
-                {Number(o.total).toLocaleString()} so'm
-              </div>
-              <div style={{fontSize:'0.75rem',color:'#bbb',marginTop:'4px'}}>
-                {new Date(o.createdAt).toLocaleDateString('uz-UZ')}
+              {o.address && (
+                <div className="order-card-address">📍 {o.address}</div>
+              )}
+              {o.items && o.items.length > 0 && (
+                <div style={{fontSize:'0.82rem',color:'#666',marginBottom:'6px'}}>
+                  {o.items.map(i => (
+                    <span key={i.id} style={{marginRight:'8px'}}>
+                      {i.product ? i.product.name : 'Mahsulot'} x{i.quantity}
+                    </span>
+                  ))}
+                </div>
+              )}
+              <div className="order-card-total">{Number(o.total).toLocaleString()} so'm</div>
+              <div className="order-card-date">
+                {new Date(o.createdAt).toLocaleDateString('uz-UZ', {
+                  year: 'numeric', month: 'long', day: 'numeric',
+                  hour: '2-digit', minute: '2-digit'
+                })}
               </div>
             </div>
           ))
