@@ -17,6 +17,7 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [notification, setNotification] = useState(null);
+  const [deliveryType, setDeliveryType] = useState('delivery');
   const [banner, setBanner] = useState({
     title: 'Yangi mahsulotlar!',
     subtitle: 'Har kuni yangi va mazali taomlar',
@@ -56,9 +57,7 @@ export default function App() {
   function addToCart(product) {
     setCart(prev => {
       const existing = prev.find(c => c.id === product.id);
-      if (existing) {
-        return prev.map(c => c.id === product.id ? {...c, qty: c.qty + 1} : c);
-      }
+      if (existing) return prev.map(c => c.id === product.id ? {...c, qty: c.qty + 1} : c);
       return [...prev, {...product, qty: 1}];
     });
   }
@@ -66,9 +65,8 @@ export default function App() {
   function removeFromCart(id) {
     setCart(prev => {
       const existing = prev.find(c => c.id === id);
-      if (existing.qty > 1) {
-        return prev.map(c => c.id === id ? {...c, qty: c.qty - 1} : c);
-      }
+      if (!existing) return prev;
+      if (existing.qty > 1) return prev.map(c => c.id === id ? {...c, qty: c.qty - 1} : c);
       return prev.filter(c => c.id !== id);
     });
   }
@@ -79,30 +77,29 @@ export default function App() {
   }
 
   const cartTotal = cart.reduce((s, c) => s + c.qty, 0);
+  const cartSum = cart.reduce((s, c) => s + c.qty * c.price, 0);
 
   return (
     <div className="app">
       {notification && (
-        <div style={{
-          position:'fixed',top:0,left:'50%',transform:'translateX(-50%)',
-          width:'100%',maxWidth:'480px',background:'#1a6b5a',color:'#fff',
-          padding:'14px 16px',zIndex:1000,textAlign:'center',
-          fontWeight:700,fontSize:'0.9rem',boxShadow:'0 4px 12px rgba(0,0,0,0.2)'
-        }}>
-          {notification}
+        <div className="notification">
+          🔔 {notification}
         </div>
       )}
+
       {page === 'home' && (
         <Home
           products={products}
           banner={banner}
           cart={cart}
-          addToCart={addToCart}
           cartTotal={cartTotal}
+          cartSum={cartSum}
+          addToCart={addToCart}
           setPage={setPage}
           openProduct={openProduct}
-          API={API}
           loading={loading}
+          deliveryType={deliveryType}
+          setDeliveryType={setDeliveryType}
         />
       )}
       {page === 'detail' && (
@@ -116,10 +113,13 @@ export default function App() {
       {page === 'cart' && (
         <Cart
           cart={cart}
+          cartSum={cartSum}
           addToCart={addToCart}
           removeFromCart={removeFromCart}
           setPage={setPage}
+          setCart={setCart}
           API={API}
+          deliveryType={deliveryType}
         />
       )}
       {page === 'orders' && (
@@ -128,20 +128,24 @@ export default function App() {
       {page === 'profile' && (
         <Profile setPage={setPage} API={API} />
       )}
+
       <nav className="bottom-nav">
         <button className={page === 'home' ? 'active' : ''} onClick={() => setPage('home')}>
-          <span>🏠</span><span>Bosh sahifa</span>
+          <span className="nav-icon">🏠</span>
+          <span>Bosh sahifa</span>
         </button>
         <button className={page === 'cart' ? 'active' : ''} onClick={() => setPage('cart')}>
-          <span>🛒</span>
+          <span className="nav-icon">🛒</span>
           {cartTotal > 0 && <span className="badge">{cartTotal}</span>}
           <span>Savat</span>
         </button>
         <button className={page === 'orders' ? 'active' : ''} onClick={() => setPage('orders')}>
-          <span>📋</span><span>Buyurtmalar</span>
+          <span className="nav-icon">📋</span>
+          <span>Buyurtmalar</span>
         </button>
         <button className={page === 'profile' ? 'active' : ''} onClick={() => setPage('profile')}>
-          <span>👤</span><span>Profil</span>
+          <span className="nav-icon">👤</span>
+          <span>Profil</span>
         </button>
       </nav>
     </div>
