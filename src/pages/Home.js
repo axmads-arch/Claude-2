@@ -32,8 +32,11 @@ export default function Home({ products, banner, cart, cartTotal, cartSum, addTo
   if (sortType === 'expensive') filtered = [...filtered].sort((a, b) => b.price - a.price);
   if (sortType === 'az') filtered = [...filtered].sort((a, b) => a.name.localeCompare(b.name));
 
+  const isLoggedIn = !!localStorage.getItem('userPhone');
+
   return (
     <div>
+      {/* HEADER */}
       <div className="header">
         <div className="header-top">
           <div className="logo">
@@ -44,8 +47,14 @@ export default function Home({ products, banner, cart, cartTotal, cartSum, addTo
             </div>
           </div>
           <div className="header-actions">
-            <button className="icon-btn" onClick={() => setPage('search')}>🔍</button>
-            <button className="icon-btn">🔔</button>
+            {!isLoggedIn && (
+              <button className="header-login-btn" onClick={() => setPage('profile')}>
+                Kirish
+              </button>
+            )}
+            {isLoggedIn && (
+              <button className="icon-btn" onClick={() => setPage('profile')}>👤</button>
+            )}
           </div>
         </div>
 
@@ -73,7 +82,10 @@ export default function Home({ products, banner, cart, cartTotal, cartSum, addTo
             onChange={e => setSearch(e.target.value)}
           />
         </div>
+      </div>
 
+      {/* STICKY CATEGORIES */}
+      <div className="categories-sticky">
         <div className="categories-wrap">
           <button className="filter-btn" onClick={() => setShowSort(true)}>⚙️</button>
           {categories.map(cat => (
@@ -88,6 +100,7 @@ export default function Home({ products, banner, cart, cartTotal, cartSum, addTo
         </div>
       </div>
 
+      {/* MAIN */}
       <div className="main">
         <div className="banner">
           <div className="banner-text">
@@ -120,28 +133,29 @@ export default function Home({ products, banner, cart, cartTotal, cartSum, addTo
                 <div className="product-info">
                   <div className="product-price">{Number(p.price).toLocaleString()} so'm</div>
                   <div className="product-name">{p.name}</div>
-                  <button
-                    className="product-add-btn"
-                    onClick={e => { e.stopPropagation(); addToCart(p); }}
-                  >+</button>
                 </div>
+                <button
+                  className="product-add-btn"
+                  onClick={e => { e.stopPropagation(); addToCart(p); }}
+                >+</button>
               </div>
             ))}
           </div>
         )}
       </div>
 
+      {/* FLOATING CART */}
       {cartTotal > 0 && (
-        <div style={{
-          position:'fixed', bottom:'70px', left:'50%', transform:'translateX(-50%)',
-          width:'calc(100% - 32px)', maxWidth:'448px', zIndex:45
-        }}>
-          <button className="btn-primary" onClick={() => setPage('cart')}>
-            🛒 Savatni ko'rish — {Number(cartSum).toLocaleString()} so'm ({cartTotal} ta)
-          </button>
-        </div>
+        <button className="floating-cart" onClick={() => setPage('cart')}>
+          <div className="floating-cart-left">
+            <span className="floating-cart-count">{cartTotal} ta</span>
+            <span className="floating-cart-text">Savatni ko'rish</span>
+          </div>
+          <span className="floating-cart-sum">{Number(cartSum).toLocaleString()} so'm</span>
+        </button>
       )}
 
+      {/* SORT MODAL */}
       {showSort && (
         <div className="modal-overlay" onClick={() => setShowSort(false)}>
           <div className="modal-sheet" onClick={e => e.stopPropagation()}>
