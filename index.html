@@ -1,162 +1,373 @@
 <!DOCTYPE html>
-<html lang="uz">
+
+<html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<title>Rahmat Chef — Sweet Pastry</title>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Rahmat Chef</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--primary:#1a6b5a;--primary2:#15584a;--accent:#2d9b7f;--light:#e8f5f1;--orange:#f4a623;--white:#ffffff;--bg:#f8f8f8;--text:#1a1a1a;--muted:#888;--border:#eee;--radius:16px}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);max-width:480px;margin:0 auto;min-height:100vh}
-.header{background:#fff;padding:14px 16px 0;position:sticky;top:0;z-index:40;box-shadow:0 2px 12px rgba(0,0,0,0.06)}
-.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.logo{display:flex;align-items:center;gap:10px}
-.logo-img{width:46px;height:46px;background:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.4rem}
-.logo-name{font-weight:900;font-size:1rem;color:var(--text)}
-.logo-sub{font-size:0.72rem;color:var(--primary);font-weight:600}
-.cart-btn{background:var(--primary);border:none;padding:10px 18px;border-radius:24px;display:flex;align-items:center;gap:8px;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.9rem;color:#fff}
-.cart-count{background:#fff;color:var(--primary);border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:900}
-.cart-sum{font-size:0.78rem;color:#fff;opacity:0.9}
-.search-wrap{display:flex;align-items:center;gap:10px;background:#f5f5f5;border-radius:14px;padding:11px 14px;margin-bottom:12px;border:1.5px solid transparent;transition:all 0.2s}
-.search-wrap:focus-within{background:#fff;border-color:var(--primary)}
-.search-wrap input{border:none;background:transparent;flex:1;font-family:'Nunito',sans-serif;font-size:0.9rem;color:var(--text);outline:none}
-.search-wrap input::placeholder{color:#bbb}
-.categories{display:flex;gap:8px;overflow-x:auto;padding-bottom:14px;scrollbar-width:none}
-.categories::-webkit-scrollbar{display:none}
-.cat-btn{flex-shrink:0;padding:8px 18px;border-radius:24px;border:1.5px solid var(--border);background:#fff;font-family:'Nunito',sans-serif;font-size:0.82rem;font-weight:700;cursor:pointer;white-space:nowrap;transition:all 0.2s;color:#555}
-.cat-btn.active{background:var(--primary);border-color:var(--primary);color:#fff}
-.main{padding:16px}
-.banner{background:linear-gradient(135deg,var(--primary),var(--accent));border-radius:20px;padding:20px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;overflow:hidden;position:relative}
-.banner::before{content:'';position:absolute;right:-20px;top:-20px;width:100px;height:100px;background:rgba(255,255,255,0.1);border-radius:50%}
-.banner-text{color:#fff;z-index:1}
-.banner-text h2{font-size:1.2rem;font-weight:900;margin-bottom:4px}
-.banner-text p{font-size:0.82rem;opacity:0.9}
-.banner-emoji{font-size:3rem;z-index:1}
-.section-title{font-size:1rem;font-weight:900;margin-bottom:14px;color:var(--text)}
-.products-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
-.product-card{background:#fff;border-radius:var(--radius);overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06);transition:transform 0.2s}
-.product-card:active{transform:scale(0.97)}
-.product-img{height:130px;background:var(--light);display:flex;align-items:center;justify-content:center;font-size:2.5rem;overflow:hidden}
-.product-img img{width:100%;height:100%;object-fit:cover}
-.product-info{padding:10px}
-.product-name{font-weight:800;font-size:0.88rem;margin-bottom:3px;color:var(--text)}
-.product-desc{font-size:0.75rem;color:var(--muted);margin-bottom:8px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.product-footer{display:flex;justify-content:space-between;align-items:center}
-.product-price{font-weight:900;font-size:0.88rem;color:var(--primary)}
-.add-btn{background:var(--primary);color:#fff;border:none;width:28px;height:28px;border-radius:50%;font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:100;display:none;align-items:flex-end;justify-content:center}
-.overlay.open{display:flex}
-.modal{background:#fff;width:100%;max-width:480px;border-radius:24px 24px 0 0;padding:20px;max-height:85vh;overflow-y:auto}
-.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
-.modal-header h3{font-size:1.1rem;font-weight:900}
-.close-btn{background:#f5f5f5;border:none;width:34px;height:34px;border-radius:50%;font-size:1.1rem;cursor:pointer}
-.cart-item{display:flex;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid var(--border)}
-.cart-item-name{flex:1;font-weight:700;font-size:0.88rem}
-.cart-item-price{font-weight:800;color:var(--primary);font-size:0.85rem;min-width:80px;text-align:right}
-.qty-btn{background:var(--light);border:none;width:28px;height:28px;border-radius:50%;font-size:1rem;cursor:pointer;font-weight:900;color:var(--primary)}
-.qty-num{font-weight:800;font-size:0.9rem;min-width:20px;text-align:center}
-.cart-total{display:flex;justify-content:space-between;align-items:center;padding:16px 0;font-weight:900;font-size:1rem;border-top:2px solid var(--border);margin-top:8px}
-.empty-cart{text-align:center;padding:30px;color:var(--muted);font-size:0.9rem}
-.order-btn{width:100%;background:var(--primary);color:#fff;border:none;padding:16px;border-radius:14px;font-family:'Nunito',sans-serif;font-weight:900;font-size:1rem;cursor:pointer;margin-top:8px}
-.form-group{margin-bottom:14px}
-.form-group label{display:block;font-weight:700;font-size:0.85rem;margin-bottom:6px;color:var(--text)}
-.form-group input,.form-group textarea{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:12px;font-family:'Nunito',sans-serif;font-size:0.9rem;outline:none;transition:border 0.2s}
-.form-group input:focus,.form-group textarea:focus{border-color:var(--primary)}
-.form-group textarea{resize:none;height:80px}
-.success-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:200;display:none;align-items:center;justify-content:center}
-.success-overlay.open{display:flex}
-.success-box{background:#fff;border-radius:24px;padding:40px 30px;text-align:center;max-width:300px}
-.success-box .icon{font-size:4rem;margin-bottom:16px}
-.success-box h3{font-size:1.2rem;font-weight:900;margin-bottom:8px;color:var(--primary)}
-.success-box p{font-size:0.88rem;color:var(--muted)}
+:root{--green:#2d6a4f;--green-dk:#1f4d38;--green-lt:#eef5f1;--text:#111;--muted:#888;--border:#efefef;--bg:#f7f7f7;--w:#fff;--r:14px;--rl:18px}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+.app{max-width:480px;margin:0 auto;min-height:100vh;background:var(--w);position:relative}
+
+/* HEADER */
+.header{background:var(–w);padding:14px 16px 0;position:sticky;top:0;z-index:40;border-bottom:1px solid var(–border)}
+.hdr-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.brand{display:flex;align-items:center;gap:10px}
+.brand-logo{width:44px;height:44px;border-radius:50%;background:var(–green);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:13px;letter-spacing:-.5px}
+.brand-name{font-size:17px;font-weight:700}
+.hdr-icons{display:flex;gap:8px}
+.hdr-btn{width:36px;height:36px;border-radius:50%;border:1px solid var(–border);background:var(–w);display:flex;align-items:center;justify-content:center;cursor:pointer;color:#555}
+.delivery-row{display:flex;align-items:center;justify-content:space-between;padding-bottom:12px;position:relative}
+.dlv-left{display:flex;flex-direction:column;gap:2px}
+.dlv-label{font-size:11px;color:var(–muted);font-weight:500}
+.dlv-addr{font-size:13px;font-weight:600;display:flex;align-items:center;gap:4px;cursor:pointer}
+.dlv-toggle{display:flex;align-items:center;gap:6px;border:1.5px solid var(–border);border-radius:10px;padding:8px 14px;font-size:14px;font-weight:700;background:var(–w);cursor:pointer}
+.dlv-dd{position:absolute;top:calc(100% + 4px);right:0;background:var(–w);border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,.13);z-index:99;min-width:190px;overflow:hidden}
+.dd-row{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;font-size:15px;font-weight:500;cursor:pointer;border-bottom:1px solid var(–border)}
+.dd-row:last-child{border-bottom:none}
+.dd-chk{width:22px;height:22px;border-radius:50%;background:var(–green);display:flex;align-items:center;justify-content:center}
+
+/* CATEGORIES */
+.cats-bar{background:var(–w);border-bottom:1px solid var(–border);position:sticky;top:117px;z-index:39}
+.cats-scroll{display:flex;overflow-x:auto;scrollbar-width:none;padding:12px 16px;gap:8px}
+.cats-scroll::-webkit-scrollbar{display:none}
+.cat-btn{flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:6px;border:none;background:none;cursor:pointer;min-width:62px}
+.cat-icon{width:56px;height:56px;border-radius:14px;background:#f2f2f2;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#666;transition:all .2s;border:2px solid transparent}
+.cat-btn.active .cat-icon{background:var(–green-lt);border-color:var(–green);color:var(–green)}
+.cat-lbl{font-size:11px;font-weight:500;color:var(–muted);text-align:center;line-height:1.3}
+.cat-btn.active .cat-lbl{color:var(–green);font-weight:600}
+
+/* ADDRESS BANNER */
+.addr-banner{margin:16px 16px 0;background:var(–w);border-radius:var(–rl);border:1px solid var(–border);padding:22px 16px;text-align:center}
+.addr-banner h3{font-size:17px;font-weight:700;margin-bottom:6px}
+.addr-banner p{font-size:13px;color:var(–muted);margin-bottom:18px}
+.addr-btns{display:flex;gap:10px}
+.btn-later{flex:1;padding:13px;border-radius:24px;border:none;background:#f2f2f2;font-family:‘Inter’,sans-serif;font-size:15px;font-weight:600;cursor:pointer}
+.btn-addr{flex:1;padding:13px;border-radius:24px;border:none;background:var(–green);font-family:‘Inter’,sans-serif;font-size:15px;font-weight:600;cursor:pointer;color:#fff}
+
+/* PRODUCTS */
+.main{padding:16px;padding-bottom:90px}
+.sec-title{font-size:20px;font-weight:800;margin-bottom:14px;letter-spacing:-.3px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.card{background:var(–w);border-radius:var(–rl);border:1px solid #ebebeb;overflow:hidden;cursor:pointer;transition:opacity .15s}
+.card:active{opacity:.85}
+.card-img{width:100%;aspect-ratio:1;background:#f2f2f2;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.card-img img{width:100%;height:100%;object-fit:cover}
+.no-img{display:flex;align-items:center;justify-content:center;width:100%;height:100%;background:#f0f0f0}
+.card-body{padding:10px 10px 0}
+.card-price{font-size:14px;font-weight:700;color:var(–green);margin-bottom:4px}
+.card-name{font-size:13px;font-weight:500;line-height:1.4;margin-bottom:10px}
+.card-add{width:100%;padding:12px;border:none;border-top:1px solid #f0f0f0;background:var(–w);font-size:22px;font-weight:300;color:#333;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.card-add:active{background:#f9f9f9}
+.card-ctrl{width:100%;display:flex;align-items:center;border-top:1px solid #f0f0f0}
+.cc-btn{flex:1;padding:11px;border:none;background:var(–w);font-size:20px;font-weight:500;color:#333;cursor:pointer}
+.cc-n{font-size:15px;font-weight:700;flex-shrink:0}
+
+/* SEARCH PAGE */
+.srch-page{display:none;position:fixed;inset:0;background:var(–w);z-index:80;max-width:480px;left:50%;transform:translateX(-50%)}
+.srch-page.show{display:block}
+.srch-hdr{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(–border)}
+.srch-back{width:40px;height:40px;border-radius:12px;border:1px solid var(–border);background:var(–w);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+.srch-wrap{flex:1;display:flex;align-items:center;gap:8px;background:#f2f2f2;border-radius:12px;padding:10px 14px}
+.srch-inp{border:none;background:none;flex:1;font-family:‘Inter’,sans-serif;font-size:15px;outline:none;color:var(–text)}
+.srch-inp::placeholder{color:#bbb}
+.srch-results{padding:16px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* PAGES */
+.page{display:none;position:fixed;inset:0;background:var(–w);z-index:70;max-width:480px;left:50%;transform:translateX(-50%);overflow-y:auto;padding-bottom:130px}
+.page.show{display:block}
+.pg-hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(–border);position:sticky;top:0;background:var(–w);z-index:5}
+.pg-back{width:36px;height:36px;border-radius:50%;border:1px solid var(–border);background:var(–w);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(–text)}
+.pg-title{font-size:17px;font-weight:700;flex:1;text-align:center}
+.pg-act{width:36px;height:36px;border-radius:50%;border:1px solid var(–border);background:var(–w);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(–text)}
+
+/* CART ITEMS */
+.ci{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(–border)}
+.ci-img{width:64px;height:64px;border-radius:12px;overflow:hidden;flex-shrink:0;background:#f2f2f2;display:flex;align-items:center;justify-content:center}
+.ci-img img{width:100%;height:100%;object-fit:cover}
+.ci-info{flex:1;min-width:0}
+.ci-name{font-size:14px;font-weight:600;margin-bottom:4px}
+.ci-price{font-size:14px;font-weight:500;color:var(–muted)}
+.ci-comment{font-size:13px;color:#2563eb;font-weight:500;margin-top:5px;cursor:pointer}
+.ci-ctrl{display:flex;align-items:center;gap:10px;background:#f2f2f2;border-radius:24px;padding:6px 14px;flex-shrink:0}
+.ci-btn{width:26px;height:26px;border-radius:50%;border:none;background:var(–w);font-size:18px;font-weight:600;color:var(–text);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.ci-num{font-size:15px;font-weight:700;min-width:18px;text-align:center}
+
+/* CART FOOTER */
+.cart-ft{position:fixed;bottom:60px;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:var(–w);border-top:1px solid var(–border);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.cft-left{display:flex;flex-direction:column;gap:2px}
+.cft-lbl{font-size:12px;color:var(–muted)}
+.cft-sum{font-size:17px;font-weight:700}
+.cft-btn{background:var(–green);color:#fff;border:none;border-radius:24px;padding:14px 30px;font-family:‘Inter’,sans-serif;font-size:16px;font-weight:700;cursor:pointer;white-space:nowrap}
+.cft-btn:active{background:var(–green-dk)}
+
+/* BOTTOM NAV */
+.bnav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:var(–w);border-top:1px solid var(–border);display:flex;z-index:50;padding-bottom:env(safe-area-inset-bottom)}
+.nb{flex:1;padding:10px 0 8px;border:none;background:none;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;font-family:‘Inter’,sans-serif;font-size:11px;font-weight:500;color:#999;position:relative}
+.nb-icon{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.nb.active .nb-icon{background:var(–green)}
+.nb.active .nb-icon svg{stroke:#fff}
+.nb.active{color:var(–text)}
+.nb-badge{position:absolute;top:4px;right:calc(50% - 26px);background:var(–green);color:#fff;border-radius:50%;width:17px;height:17px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;border:2px solid var(–w)}
+
+/* OVERLAYS / SHEETS */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:100;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s}
+.overlay.show{opacity:1;pointer-events:all}
+.sheet{background:var(–w);width:100%;max-width:480px;border-radius:20px 20px 0 0;padding:20px 16px 36px;transform:translateY(100%);transition:transform .3s ease}
+.overlay.show .sheet{transform:translateY(0)}
+.sh-handle{width:40px;height:4px;background:#e0e0e0;border-radius:2px;margin:0 auto 18px}
+.sh-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.sh-title{font-size:18px;font-weight:700}
+.sh-reset{font-size:15px;font-weight:600;color:var(–green);background:none;border:none;cursor:pointer}
+.sh-x{width:30px;height:30px;border-radius:50%;background:#f2f2f2;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.sort-row{display:flex;align-items:center;justify-content:space-between;padding:17px 0;border-bottom:1px solid var(–border);cursor:pointer}
+.sort-row:last-of-type{border-bottom:none}
+.sort-lbl{font-size:15px;font-weight:400}
+.radio{width:22px;height:22px;border-radius:50%;border:2px solid #ccc;transition:all .2s;flex-shrink:0}
+.radio.on{border:6px solid var(–green)}
+.sh-apply{width:100%;background:var(–green);color:#fff;border:none;border-radius:24px;padding:16px;font-family:‘Inter’,sans-serif;font-size:16px;font-weight:700;cursor:pointer;margin-top:20px}
+
+/* AUTH */
+.auth-ttl{font-size:22px;font-weight:700;margin-bottom:20px}
+.auth-lbl{font-size:13px;color:var(–muted);margin-bottom:8px}
+.phone-wrap{display:flex;align-items:center;background:#f2f2f2;border-radius:12px;overflow:hidden;margin-bottom:12px}
+.phone-pre{padding:14px 14px;font-size:15px;font-weight:700;border-right:1px solid #e0e0e0}
+.phone-inp{flex:1;padding:14px;border:none;background:none;font-family:‘Inter’,sans-serif;font-size:15px;outline:none}
+.auth-terms{font-size:13px;color:var(–muted);margin-bottom:20px;line-height:1.6}
+.auth-terms a{color:var(–green);text-decoration:none}
+.auth-main-btn{width:100%;background:var(–green);color:#fff;border:none;border-radius:24px;padding:16px;font-family:‘Inter’,sans-serif;font-size:16px;font-weight:700;cursor:pointer;margin-bottom:16px}
+.auth-div{display:flex;align-items:center;gap:12px;color:var(–muted);font-size:12px;margin-bottom:16px;text-transform:uppercase;font-weight:600;letter-spacing:.5px}
+.auth-div::before,.auth-div::after{content:’’;flex:1;height:1px;background:var(–border)}
+.google-btn{width:100%;background:var(–w);border:1.5px solid var(–border);border-radius:24px;padding:14px;font-family:‘Inter’,sans-serif;font-size:15px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px}
+.otp-row{display:flex;gap:10px;margin-bottom:20px}
+.otp-box{flex:1;height:56px;border:1.5px solid var(–border);border-radius:12px;font-family:‘Inter’,sans-serif;font-size:22px;font-weight:700;text-align:center;outline:none;color:var(–text)}
+.otp-box:focus{border-color:var(–green)}
+
+/* PROFILE */
+.prof-top{padding:20px 16px 16px;border-bottom:1px solid var(–border)}
+.prof-name{font-size:24px;font-weight:800;margin-bottom:4px}
+.prof-phone{font-size:14px;color:var(–muted)}
+.prof-row-actions{display:flex;gap:8px;margin-top:-4px}
+.prof-icon-btn{width:36px;height:36px;border-radius:50%;border:1px solid var(–border);background:var(–w);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(–muted)}
+.menu-sep{height:8px;background:var(–bg)}
+.menu-row{display:flex;align-items:center;gap:14px;padding:17px 16px;border-bottom:1px solid var(–border);cursor:pointer}
+.menu-row:last-child{border-bottom:none}
+.mr-icon{color:var(–muted);flex-shrink:0}
+.mr-lbl{flex:1;font-size:15px;font-weight:500}
+.mr-arr{color:#ccc}
+.powered{text-align:center;padding:28px 16px;font-size:14px;color:var(–muted)}
+.powered b{color:var(–text)}
+
+/* ORDERS */
+.oc{margin:12px 16px 0;border:1px solid var(–border);border-radius:14px;padding:16px}
+.oc-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.oc-id{font-size:15px;font-weight:700}
+.badge{padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600}
+.b-new{background:#fef3c7;color:#92400e}
+.b-done{background:#dcfce7;color:#166534}
+.b-way{background:#ede9fe;color:#5b21b6}
+.oc-items{font-size:13px;color:var(–muted);margin-bottom:6px}
+.oc-total{font-size:15px;font-weight:700;color:var(–green)}
+.oc-date{font-size:12px;color:#bbb;margin-top:4px}
+
+/* EMPTY */
+.empty{text-align:center;padding:60px 20px}
+.empty h3{font-size:16px;font-weight:700;margin-bottom:8px}
+.empty p{font-size:14px;color:var(–muted);margin-bottom:24px}
+.empty-btn{background:var(–green);color:#fff;border:none;border-radius:24px;padding:14px 32px;font-family:‘Inter’,sans-serif;font-size:15px;font-weight:700;cursor:pointer}
+
+/* SUCCESS */
+.suc-ov{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s}
+.suc-ov.show{opacity:1;pointer-events:all}
+.suc-box{background:var(–w);border-radius:24px;padding:40px 28px;text-align:center;width:100%;max-width:320px}
+.suc-icon{width:72px;height:72px;border-radius:50%;background:var(–green-lt);display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
+.suc-title{font-size:20px;font-weight:700;color:var(–green);margin-bottom:8px}
+.suc-text{font-size:14px;color:var(–muted);margin-bottom:24px}
+.suc-btn{width:100%;background:var(–green);color:#fff;border:none;border-radius:24px;padding:15px;font-family:‘Inter’,sans-serif;font-size:16px;font-weight:700;cursor:pointer}
+
+.dn{display:none!important}
 </style>
+
 </head>
 <body>
+<div class="app">
 
-<div class="header">
-  <div class="header-top">
-    <div class="logo">
-      <div class="logo-img">🍰</div>
-      <div>
-        <div class="logo-name">Rahmat Chef</div>
-        <div class="logo-sub">Sweet Pastry</div>
+<!-- HOME -->
+
+<div id="homeWrap">
+  <div class="header">
+    <div class="hdr-top">
+      <div class="brand">
+        <div class="brand-logo">RC</div>
+        <span class="brand-name">Rahmat Chef</span>
+      </div>
+      <div class="hdr-icons">
+        <button class="hdr-btn" onclick="App.openSearch()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        </button>
+        <button class="hdr-btn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        </button>
       </div>
     </div>
-    <button class="cart-btn" onclick="openCart()">
-      🛒 <span id="cartCount" class="cart-count">0</span>
-      <span id="cartSum" class="cart-sum"></span>
+    <div class="delivery-row">
+      <div class="dlv-left">
+        <span class="dlv-label">Доставка</span>
+        <span class="dlv-addr" onclick="App.toggleDD()">
+          Определение адреса ...
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+        </span>
+      </div>
+      <button class="dlv-toggle" onclick="App.toggleDD()" id="ddBtn">
+        <span id="ddBtnTxt">Доставка</span>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      <div class="dlv-dd dn" id="delivDD">
+        <div class="dd-row" onclick="App.setDelivery('Доставка')">
+          Доставка
+          <div class="dd-chk" id="chkD"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg></div>
+        </div>
+        <div class="dd-row" onclick="App.setDelivery('Самовывоз')">
+          Самовывоз
+          <div class="dd-chk dn" id="chkS"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cats-bar">
+    <div class="cats-scroll" id="catsScroll"></div>
+  </div>
+
+  <div class="addr-banner" id="addrBanner">
+    <h3>Введите адрес доставки</h3>
+    <p>По которому курьер сможет вас найти</p>
+    <div class="addr-btns">
+      <button class="btn-later" onclick="document.getElementById('addrBanner').style.display='none'">Позже</button>
+      <button class="btn-addr">Введите адрес</button>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="sec-title" id="secTitle">Завтраки</div>
+    <div class="grid" id="prodGrid"></div>
+  </div>
+</div>
+
+<!-- SEARCH -->
+
+<div class="srch-page" id="srchPage">
+  <div class="srch-hdr">
+    <button class="srch-back" onclick="App.closeSearch()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+    </button>
+    <div class="srch-wrap">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input class="srch-inp" type="text" placeholder="Быстрый поиск" id="srchInp" oninput="App.search(this.value)">
+    </div>
+  </div>
+  <div class="srch-results" id="srchResults"></div>
+</div>
+
+<!-- CART -->
+
+<div class="page" id="cartPage">
+  <div class="pg-hdr">
+    <button class="pg-back" onclick="App.closePage('cartPage')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+    </button>
+    <span class="pg-title">Корзина</span>
+    <button class="pg-act" onclick="App.clearCart()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6M9 6V4h6v2"/></svg>
     </button>
   </div>
-  <div class="search-wrap">
-    <span>🔍</span>
-    <input type="text" placeholder="Mahsulot qidiring..." oninput="searchProducts(this.value)">
-  </div>
-  <div class="categories" id="categories"></div>
-</div>
-
-<div class="main">
-  <div class="banner">
-    <div class="banner-text">
-      <h2 id="bannerTitle">Yangi mahsulotlar! 🎉</h2>
-      <p id="bannerSubtitle">Har kuni yangi va mazali taomlar</p>
+  <div id="cartContent"></div>
+  <div class="cart-ft" id="cartFt">
+    <div class="cft-left">
+      <span class="cft-lbl">Сумма заказа</span>
+      <span class="cft-sum" id="cartSum">0 UZS</span>
     </div>
-    <div class="banner-emoji" id="bannerEmoji">🍩</div>
-  </div>
-  <div class="section-title">Mahsulotlar</div>
-  <div class="products-grid" id="productsGrid">
-    <div style="grid-column:1/-1;text-align:center;padding:40px;color:#888">Yuklanmoqda...</div>
+    <button class="cft-btn" onclick="App.checkout()">Далее</button>
   </div>
 </div>
 
-<!-- CART MODAL -->
-<div class="overlay" id="cartOverlay" onclick="closeCartOutside(event)">
-  <div class="modal">
-    <div class="modal-header">
-      <h3>🛒 Savat</h3>
-      <button class="close-btn" onclick="closeCart()">✕</button>
+<!-- ORDERS -->
+
+<div class="page" id="ordersPage">
+  <div class="pg-hdr">
+    <div style="width:36px"></div>
+    <span class="pg-title">Заказы</span>
+    <div style="width:36px"></div>
+  </div>
+  <div id="ordersContent"></div>
+</div>
+
+<!-- PROFILE -->
+
+<div class="page" id="profilePage">
+  <div id="profileContent"></div>
+</div>
+
+<!-- BOTTOM NAV -->
+
+<nav class="bnav">
+  <button class="nb active" id="nbHome" onclick="App.nav('home',this)">
+    <div class="nb-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+    Главная
+  </button>
+  <button class="nb" id="nbCart" onclick="App.nav('cart',this)">
+    <div class="nb-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg></div>
+    Корзина
+  </button>
+  <button class="nb" id="nbOrders" onclick="App.nav('orders',this)">
+    <div class="nb-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+    Заказы
+  </button>
+  <button class="nb" id="nbProfile" onclick="App.nav('profile',this)">
+    <div class="nb-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+    Профиль
+  </button>
+</nav>
+
+<!-- SORT SHEET -->
+
+<div class="overlay" id="sortOv" onclick="App.closeSortOut(event)">
+  <div class="sheet">
+    <div class="sh-handle"></div>
+    <div class="sh-top">
+      <span class="sh-title">Сортировка</span>
+      <button class="sh-reset" onclick="App.resetSort()">Сбросить</button>
+      <button class="sh-x" onclick="App.closeSort()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
     </div>
-    <div id="cartItems"></div>
-    <div class="cart-total">
-      <span>Jami:</span>
-      <span id="cartTotal">0 so'm</span>
-    </div>
-    <button class="order-btn" onclick="sendOrder()">📦 Buyurtma berish</button>
+    <div id="sortOpts"></div>
+    <button class="sh-apply" onclick="App.applySort()">Фильтровать</button>
   </div>
 </div>
 
-<!-- ORDER FORM MODAL -->
-<div class="overlay" id="orderOverlay" onclick="closeOrderOutside(event)">
-  <div class="modal">
-    <div class="modal-header">
-      <h3>📝 Buyurtma</h3>
-      <button class="close-btn" onclick="closeOrderForm()">✕</button>
-    </div>
-    <div class="form-group">
-      <label>Ismingiz</label>
-      <input type="text" id="orderName" placeholder="Ism Familiya">
-    </div>
-    <div class="form-group">
-      <label>Telefon</label>
-      <input type="tel" id="orderPhone" placeholder="+998 90 000 00 00">
-    </div>
-    <div class="form-group">
-      <label>Manzil</label>
-      <textarea id="orderAddress" placeholder="To'liq manzilingizni kiriting"></textarea>
-    </div>
-    <button class="order-btn" id="submitBtn" onclick="submitOrder()">✅ Buyurtma berish</button>
+<!-- AUTH SHEET -->
+
+<div class="overlay" id="authOv" onclick="App.closeAuthOut(event)">
+  <div class="sheet">
+    <div class="sh-handle"></div>
+    <div id="authContent"></div>
   </div>
 </div>
 
 <!-- SUCCESS -->
-<div class="success-overlay" id="successOverlay">
-  <div class="success-box">
-    <div class="icon">🎉</div>
-    <h3>Buyurtma qabul qilindi!</h3>
-    <p>Tez orada siz bilan bog'lanamiz</p>
+
+<div class="suc-ov" id="sucOv">
+  <div class="suc-box">
+    <div class="suc-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#2d6a4f" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg></div>
+    <div class="suc-title">Заказ принят!</div>
+    <div class="suc-text">Ваш заказ готовится. Ожидайте курьера через 25–35 минут.</div>
+    <button class="suc-btn" onclick="App.closeSuccess()">Отлично!</button>
   </div>
 </div>
 
+</div>
 <script src="app.js"></script>
 </body>
 </html>
